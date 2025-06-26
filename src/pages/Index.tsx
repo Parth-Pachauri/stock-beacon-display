@@ -1,12 +1,49 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useState } from 'react';
+import Header from '@/components/Header';
+import Dashboard from '@/components/Dashboard';
+import StockDetail from '@/components/StockDetail';
+import Watchlist from '@/components/Watchlist';
+import { Stock } from '@/types/stock';
 
 const Index = () => {
+  const [currentView, setCurrentView] = useState<'dashboard' | 'stock' | 'watchlist'>('dashboard');
+  const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
+
+  const handleStockSelect = (stock: Stock) => {
+    setSelectedStock(stock);
+    setCurrentView('stock');
+  };
+
+  const handleBackToDashboard = () => {
+    setCurrentView('dashboard');
+    setSelectedStock(null);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
+      <Header 
+        currentView={currentView} 
+        setCurrentView={setCurrentView}
+        onStockSelect={handleStockSelect}
+      />
+      
+      <main className="container mx-auto px-4 py-8">
+        {currentView === 'dashboard' && (
+          <Dashboard onStockSelect={handleStockSelect} />
+        )}
+        
+        {currentView === 'stock' && selectedStock && (
+          <StockDetail 
+            stock={selectedStock} 
+            onBack={handleBackToDashboard}
+          />
+        )}
+        
+        {currentView === 'watchlist' && (
+          <Watchlist onStockSelect={handleStockSelect} />
+        )}
+      </main>
     </div>
   );
 };
