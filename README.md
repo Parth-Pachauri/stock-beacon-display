@@ -169,21 +169,4 @@ src/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- Built with [Lovable](https://lovable.dev) - AI-powered web development
-- UI components from [Shadcn/ui](https://ui.shadcn.com/)
-- Charts powered by [Recharts](https://recharts.org/)
-- Icons from [Lucide React](https://lucide.dev/)
-
-## 📞 Support
-
-For support, please open an issue on GitHub or contact the development team.
-
----
-
-**Happy Trading! 📈**
