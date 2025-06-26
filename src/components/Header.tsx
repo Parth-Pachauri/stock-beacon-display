@@ -8,8 +8,8 @@ import { Stock } from '@/types/stock';
 import { useQuery } from '@tanstack/react-query';
 
 interface HeaderProps {
-  currentView: 'dashboard' | 'stock' | 'watchlist';
-  setCurrentView: (view: 'dashboard' | 'stock' | 'watchlist') => void;
+  currentView: 'dashboard' | 'stock' | 'watchlist' | 'notifications' | 'user';
+  setCurrentView: (view: 'dashboard' | 'stock' | 'watchlist' | 'notifications' | 'user') => void;
   onStockSelect: (stock: Stock) => void;
 }
 
@@ -91,11 +91,15 @@ const Header = ({ currentView, setCurrentView, onStockSelect }: HeaderProps) => 
           {/* Right Side Icons */}
           <div className="flex items-center space-x-4">
             <Button
-              variant="ghost"
+              variant={currentView === 'notifications' ? 'default' : 'ghost'}
+              onClick={() => setCurrentView('notifications')}
               size="icon"
-              className="text-slate-400 hover:text-white hover:bg-slate-700/50"
+              className="text-slate-400 hover:text-white hover:bg-slate-700/50 relative"
             >
               <Bell className="h-5 w-5" />
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 rounded-full flex items-center justify-center">
+                3
+              </span>
             </Button>
             
             <Button
@@ -108,7 +112,8 @@ const Header = ({ currentView, setCurrentView, onStockSelect }: HeaderProps) => 
             </Button>
 
             <Button
-              variant="ghost"
+              variant={currentView === 'user' ? 'default' : 'ghost'}
+              onClick={() => setCurrentView('user')}
               size="icon"
               className="text-slate-400 hover:text-white hover:bg-slate-700/50"
             >
