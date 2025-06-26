@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Search, TrendingUp, Star, Bell, User } from 'lucide-react';
+import { Search, TrendingUp, Star, Bell, User, Brain } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { stockService } from '@/services/stockService';
@@ -8,8 +8,8 @@ import { Stock } from '@/types/stock';
 import { useQuery } from '@tanstack/react-query';
 
 interface HeaderProps {
-  currentView: 'dashboard' | 'stock' | 'watchlist' | 'notifications' | 'user';
-  setCurrentView: (view: 'dashboard' | 'stock' | 'watchlist' | 'notifications' | 'user') => void;
+  currentView: 'dashboard' | 'stock' | 'watchlist' | 'notifications' | 'user' | 'ml';
+  setCurrentView: (view: 'dashboard' | 'stock' | 'watchlist' | 'notifications' | 'user' | 'ml') => void;
   onStockSelect: (stock: Stock) => void;
 }
 
@@ -90,6 +90,15 @@ const Header = ({ currentView, setCurrentView, onStockSelect }: HeaderProps) => 
 
           {/* Right Side Icons */}
           <div className="flex items-center space-x-4">
+            <Button
+              variant={currentView === 'ml' ? 'default' : 'ghost'}
+              onClick={() => setCurrentView('ml')}
+              size="icon"
+              className="text-slate-400 hover:text-white hover:bg-slate-700/50"
+            >
+              <Brain className="h-5 w-5" />
+            </Button>
+
             <Button
               variant={currentView === 'notifications' ? 'default' : 'ghost'}
               onClick={() => setCurrentView('notifications')}

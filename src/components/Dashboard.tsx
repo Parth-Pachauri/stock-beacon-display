@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { stockService } from '@/services/stockService';
 import { Stock } from '@/types/stock';
@@ -13,6 +14,8 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ onStockSelect }: DashboardProps) => {
+  const [selectedChartStock, setSelectedChartStock] = useState<Stock | null>(null);
+
   const { data: trendingStocks, isLoading: trendingLoading } = useQuery({
     queryKey: ['trendingStocks'],
     queryFn: stockService.getTrendingStocks,
@@ -22,6 +25,15 @@ const Dashboard = ({ onStockSelect }: DashboardProps) => {
     queryKey: ['allStocks'],
     queryFn: stockService.getAllStocks,
   });
+
+  const handleStockSelect = (stock: Stock) => {
+    setSelectedChartStock(stock);
+    onStockSelect(stock);
+  };
+
+  const handleWatchlistStockClick = (stock: Stock) => {
+    setSelectedChartStock(stock);
+  };
 
   if (trendingLoading || allStocksLoading) {
     return (
@@ -48,12 +60,12 @@ const Dashboard = ({ onStockSelect }: DashboardProps) => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Chart Section - Takes 2/3 of the width */}
         <div className="lg:col-span-2">
-          <MainChart />
+          <MainChart selectedStock={selectedChartStock} />
         </div>
 
         {/* Right Side Panel - Top Gainers/Losers */}
         <div className="space-y-6">
-          <TopMovers onStockSelect={onStockSelect} />
+          <TopMovers onStockSelect={handleStockSelect} />
         </div>
       </div>
 
@@ -65,8 +77,8 @@ const Dashboard = ({ onStockSelect }: DashboardProps) => {
             {trendingStocks?.slice(0, 4).map((stock) => (
               <div
                 key={stock.symbol}
-                onClick={() => onStockSelect(stock)}
-                className="bg-slate-700/50 rounded-lg p-4 cursor-pointer hover:bg-slate-700/70 transition-colors"
+                onClick={() => handleWatchlistStockClick(stock)}
+                className="bg-slate-700/50 rounded-lg p-4 cursor-pointer hover:bg-slate-700/70 transition-colors border border-transparent hover:border-blue-500/50"
               >
                 <div className="flex justify-between items-center">
                   <span className="text-white font-medium">{stock.symbol}</span>

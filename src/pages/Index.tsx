@@ -6,10 +6,11 @@ import StockDetail from '@/components/StockDetail';
 import Watchlist from '@/components/Watchlist';
 import Notifications from '@/components/Notifications';
 import UserDashboard from '@/components/UserDashboard';
+import MachineLearning from '@/components/MachineLearning';
 import { Stock } from '@/types/stock';
 
 const Index = () => {
-  const [currentView, setCurrentView] = useState<'dashboard' | 'stock' | 'watchlist' | 'notifications' | 'user'>('dashboard');
+  const [currentView, setCurrentView] = useState<'dashboard' | 'stock' | 'watchlist' | 'notifications' | 'user' | 'ml'>('dashboard');
   const [selectedStock, setSelectedStock] = useState<Stock | null>(null);
 
   const handleStockSelect = (stock: Stock) => {
@@ -52,6 +53,10 @@ const Index = () => {
 
         {currentView === 'user' && (
           <UserDashboard />
+        )}
+
+        {currentView === 'ml' && (
+          <MachineLearning />
         )}
       </main>
     </div>
