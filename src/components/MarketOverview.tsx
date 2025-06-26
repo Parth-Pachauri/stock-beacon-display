@@ -11,42 +11,55 @@ const MarketOverview = () => {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="h-32 bg-slate-800/50 rounded-lg animate-pulse" />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="h-24 bg-slate-800/50 rounded-lg animate-pulse" />
         ))}
       </div>
     );
   }
 
+  // Add Russell 2000 to match the reference image
+  const allIndices = [
+    ...(indices || []),
+    {
+      name: 'RUSSELL 2000',
+      value: 2134.67,
+      change: 12.34,
+      changePercent: 0.58
+    }
+  ];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {indices?.map((index) => (
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      {allIndices.map((index) => (
         <div
           key={index.name}
-          className="bg-gradient-to-r from-slate-800/60 to-slate-700/60 backdrop-blur-sm rounded-lg p-6 border border-slate-600/50 hover:border-slate-500/50 transition-all duration-300"
+          className="bg-slate-800/60 backdrop-blur-sm rounded-lg p-4 border border-slate-600/50"
         >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold text-white">{index.name}</h3>
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="text-sm font-medium text-slate-300 uppercase tracking-wide">
+              {index.name}
+            </h3>
             {index.change >= 0 ? (
-              <TrendingUp className="h-5 w-5 text-green-400" />
+              <TrendingUp className="h-4 w-4 text-emerald-400" />
             ) : (
-              <TrendingDown className="h-5 w-5 text-red-400" />
+              <TrendingDown className="h-4 w-4 text-red-400" />
             )}
           </div>
           
-          <div className="space-y-2">
+          <div className="space-y-1">
             <div className="text-2xl font-bold text-white">
-              {index.value.toLocaleString()}
+              {index.value.toLocaleString('en-US', { minimumFractionDigits: 2 })}
             </div>
-            <div className={`flex items-center space-x-2 ${
-              index.change >= 0 ? 'text-green-400' : 'text-red-400'
+            <div className={`flex items-center space-x-2 text-sm ${
+              index.change >= 0 ? 'text-emerald-400' : 'text-red-400'
             }`}>
               <span className="font-medium">
                 {index.change >= 0 ? '+' : ''}{index.change.toFixed(2)}
               </span>
-              <span className="text-sm">
-                ({index.changePercent >= 0 ? '+' : ''}{index.changePercent.toFixed(2)}%)
+              <span>
+                {index.changePercent >= 0 ? '+' : ''}{index.changePercent.toFixed(2)}%
               </span>
             </div>
           </div>

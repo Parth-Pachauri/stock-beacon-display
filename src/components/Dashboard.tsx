@@ -4,7 +4,9 @@ import { stockService } from '@/services/stockService';
 import { Stock } from '@/types/stock';
 import StockCard from './StockCard';
 import MarketOverview from './MarketOverview';
-import { TrendingUp, Activity, Star } from 'lucide-react';
+import MainChart from './MainChart';
+import TopMovers from './TopMovers';
+import { TrendingUp } from 'lucide-react';
 
 interface DashboardProps {
   onStockSelect: (stock: Stock) => void;
@@ -23,57 +25,59 @@ const Dashboard = ({ onStockSelect }: DashboardProps) => {
 
   if (trendingLoading || allStocksLoading) {
     return (
-      <div className="space-y-8 animate-fade-in">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, i) => (
+      <div className="space-y-6 animate-fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
             <div key={i} className="h-32 bg-slate-800/50 rounded-lg animate-pulse" />
           ))}
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <div key={i} className="h-48 bg-slate-800/50 rounded-lg animate-pulse" />
-          ))}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 h-96 bg-slate-800/50 rounded-lg animate-pulse" />
+          <div className="h-96 bg-slate-800/50 rounded-lg animate-pulse" />
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      {/* Market Overview */}
+    <div className="space-y-6 animate-fade-in">
+      {/* Market Overview - 4 indices in a row */}
       <MarketOverview />
 
-      {/* Trending Stocks */}
-      <section>
-        <div className="flex items-center mb-6">
-          <TrendingUp className="h-6 w-6 text-blue-400 mr-2" />
-          <h2 className="text-2xl font-bold text-white">Trending Stocks</h2>
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Chart Section - Takes 2/3 of the width */}
+        <div className="lg:col-span-2">
+          <MainChart />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {trendingStocks?.map((stock) => (
-            <StockCard
-              key={stock.symbol}
-              stock={stock}
-              onClick={() => onStockSelect(stock)}
-            />
-          ))}
-        </div>
-      </section>
 
-      {/* All Stocks */}
-      <section>
-        <div className="flex items-center mb-6">
-          <Activity className="h-6 w-6 text-purple-400 mr-2" />
-          <h2 className="text-2xl font-bold text-white">All Stocks</h2>
+        {/* Right Side Panel - Top Gainers/Losers */}
+        <div className="space-y-6">
+          <TopMovers onStockSelect={onStockSelect} />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {allStocks?.map((stock) => (
-            <StockCard
-              key={stock.symbol}
-              stock={stock}
-              onClick={() => onStockSelect(stock)}
-            />
-          ))}
+      </div>
+
+      {/* Watchlist Section */}
+      <section>
+        <div className="bg-slate-800/60 rounded-lg p-6 border border-slate-600/50">
+          <h2 className="text-xl font-bold text-white mb-4">Watchlist</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {trendingStocks?.slice(0, 4).map((stock) => (
+              <div
+                key={stock.symbol}
+                onClick={() => onStockSelect(stock)}
+                className="bg-slate-700/50 rounded-lg p-4 cursor-pointer hover:bg-slate-700/70 transition-colors"
+              >
+                <div className="flex justify-between items-center">
+                  <span className="text-white font-medium">{stock.symbol}</span>
+                  <span className={`text-sm ${stock.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {stock.change >= 0 ? '+' : ''}{stock.changePercent.toFixed(2)}%
+                  </span>
+                </div>
+                <div className="text-slate-400 text-sm mt-1">${stock.price.toFixed(2)}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>
